@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace WeatherApp.ViewModels
             {
                 currentTemp = value;
                 OnPropertyChanged();
-                OnPropertyChanged("RawText");
+                
             }
         }
 
@@ -92,10 +93,24 @@ namespace WeatherApp.ViewModels
 
         private async Task GetTempAsync()
         {
+            
             CurrentTemp = await TemperatureService.GetTempAsync();
 
             if (CurrentTemp != null)
             {
+                if(Temperatures[1]!=null)
+                {
+                    if(Temperatures[1].City!= Temperatures[0].City&& Temperatures[1].DateTime!= Temperatures[0].DateTime)
+                    {
+                        Temperatures.Insert(0, CurrentTemp);
+                    }
+                   
+                }
+                else
+                {
+                    Temperatures.Insert(0, CurrentTemp);
+                }
+               
                 /// TODO 01 : Insérer la température à la position 0 de la collection
                 /// Description détaillée :
                 /// À chaque fois que l'on clique sur le bouton "Get Data". On veut 
